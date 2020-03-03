@@ -6,10 +6,11 @@ def apply_all_perms(position):
         perms.append(rubik.perm_apply(move, position))
     return perms
 
-def construct_path(overlap, Ldict, Rdict):
-    #need to be a list of moves
-    Lpath = [overlap]
-    Rpath = [Rdict[overlap][2]]
+def construct_path(overlap, overlapMove, Ldict, Rdict):
+    # prepend moves to left list
+    # append moves to right list
+    Lpath = [overlapMove]
+    Rpath = []
     while True:
         pass
     return Lpath + Rpath
@@ -23,6 +24,9 @@ def shortest_path(start, end):
     You can use the rubik.quarter_twists move set.
     Each move can be applied using rubik.perm_apply
     """
+    # dict: 
+    # key = current configuration
+    # value = (move, parent's configuration)
     Ldict = { start : ("s", None) }
     LQueue = [start]
     Lcount = 1
@@ -30,11 +34,13 @@ def shortest_path(start, end):
     RQueue = [end]
     Rcount = 1
     overlap = tuple()
+    overlapMove = ""
     while True:
         newLCount = 0
         for i in range(Lcount):
             if LQueue[i] in Rdict:
                 overlap = LQueue[i]
+                overlapMove = Rdict[overlap][0]
                 break
             else:
                 perms = apply_all_perms(LQueue[i])
@@ -48,6 +54,7 @@ def shortest_path(start, end):
         for i in range(Rcount):
             if RQueue[i] in Ldict:
                 overlap = RQueue[i]
+                overlapMove = Rdict[overlap][0]
                 break
             else:
                 perms = apply_all_perms(RQueue[i])
@@ -61,7 +68,7 @@ def shortest_path(start, end):
     #construct path if an overlap is found
     path = []
     if overlap:
-        path = construct_path(overlap, Ldict, Rdict)
+        path = construct_path(overlap, overlapMove, Ldict, Rdict)
     return path
 
 if __name__ == "__main__":
