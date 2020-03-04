@@ -41,7 +41,17 @@ def shortest_path(start, end):
     invariant: both queues will always store the configurations of the previous depth's permuations
     
     invariant: if a configuration that exists in a queue, as well as the oposite side's dictionary,
-               then there must exist a path from start to finish of length depth
+    then there must exist a path from start to finish of length depth
+    '''
+    '''
+    Initialization: LQueue stores the start config and RQueue Stores the end config
+    
+    Mainenance: All permuations of the current configuration are stored in their respective dictionaries,
+    and checked against the oposite diction to check for overlaps. Unique permuations are stored in their
+    respective queues to create new permutations at the next depth if no overlap is found
+    
+    Termination: an overlap is found, meaning there exists a path from start to finish of length depth,
+    or depth 7 of the BFS is reached meaning no path exists from start to finish.
     '''
     while True:
         # if depth > 7 then the cube has an invalid configuration and there is no solution
